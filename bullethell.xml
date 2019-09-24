@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="bullethell" default="all">
+  
+  
+  <property file="bullethell.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*.yarb/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.war"/>
+    <include name="*.swc"/>
+    <include name="*.zip"/>
+    <include name="*.egg"/>
+    <include name="*.ear"/>
+    <include name="*.ane"/>
+    <include name="*.jar"/>
+    <include name="*.klib"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/ext/access-bridge-64.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunmscapi.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.kotlinjavaruntime.classpath">
+    <pathelement location="${path.variable.kotlin_bundled}/lib/kotlin-reflect.jar"/>
+    <pathelement location="${path.variable.kotlin_bundled}/lib/kotlin-stdlib-jdk7.jar"/>
+    <pathelement location="${path.variable.kotlin_bundled}/lib/kotlin-stdlib-jdk8.jar"/>
+    <pathelement location="${path.variable.kotlin_bundled}/lib/kotlin-stdlib.jar"/>
+    <pathelement location="${path.variable.kotlin_bundled}/lib/kotlin-test.jar"/>
+  </path>
+  
+  <path id="library.org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-rc2.classpath">
+    <pathelement location="${basedir}/lib/annotations-13.0.jar"/>
+    <pathelement location="${basedir}/lib/kotlin-stdlib-1.3.41.jar"/>
+    <pathelement location="${basedir}/lib/kotlin-stdlib-common-1.3.41.jar"/>
+    <pathelement location="${basedir}/lib/kotlinx-coroutines-core-1.3.0-RC2.jar"/>
+  </path>
+  <!-- Register Custom Compiler Taskdefs -->
+  <property name="javac2.home" value="${idea.home}/lib"/>
+  <path id="javac2.classpath">
+    <fileset dir="${javac2.home}">
+      <include name="javac2.jar"/>
+      <include name="jdom.jar"/>
+      <include name="asm-all*.jar"/>
+      <include name="forms-*.jar"/>
+    </fileset>
+  </path>
+  <target name="register.custom.compilers">
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
+  </target>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module GameEngine -->
+  
+  <dirname property="module.gameengine.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.gameengine" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.gameengine" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.gameengine" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.gameengine" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="gameengine.output.dir" value="${module.gameengine.basedir}/out/production/GameEngine"/>
+  <property name="gameengine.testoutput.dir" value="${module.gameengine.basedir}/out/test/GameEngine"/>
+  
+  <path id="gameengine.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="gameengine.module.production.classpath">
+    <path refid="${module.jdk.classpath.gameengine}"/>
+    <path refid="library.kotlinjavaruntime.classpath"/>
+    <path refid="library.org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-rc2.classpath"/>
+  </path>
+  
+  <path id="gameengine.runtime.production.module.classpath">
+    <pathelement location="${gameengine.output.dir}"/>
+    <path refid="library.kotlinjavaruntime.classpath"/>
+    <path refid="library.org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-rc2.classpath"/>
+  </path>
+  
+  <path id="gameengine.module.classpath">
+    <path refid="${module.jdk.classpath.gameengine}"/>
+    <pathelement location="${gameengine.output.dir}"/>
+    <path refid="library.kotlinjavaruntime.classpath"/>
+    <path refid="library.org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-rc2.classpath"/>
+  </path>
+  
+  <path id="gameengine.runtime.module.classpath">
+    <pathelement location="${gameengine.testoutput.dir}"/>
+    <pathelement location="${gameengine.output.dir}"/>
+    <path refid="library.kotlinjavaruntime.classpath"/>
+    <path refid="library.org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-rc2.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.gameengine">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.gameengine">
+    <patternset refid="excluded.from.module.gameengine"/>
+  </patternset>
+  
+  <path id="gameengine.module.sourcepath">
+    <dirset dir="${module.gameengine.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.gameengine" depends="compile.module.gameengine.production,compile.module.gameengine.tests" description="Compile module GameEngine"/>
+  
+  <target name="compile.module.gameengine.production" depends="register.custom.compilers" description="Compile module GameEngine; production classes">
+    <mkdir dir="${gameengine.output.dir}"/>
+    <javac2 destdir="${gameengine.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.gameengine}/javac">
+      <compilerarg line="${compiler.args.gameengine}"/>
+      <bootclasspath refid="gameengine.module.bootclasspath"/>
+      <classpath refid="gameengine.module.production.classpath"/>
+      <src refid="gameengine.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.gameengine"/>
+    </javac2>
+    
+    <copy todir="${gameengine.output.dir}">
+      <fileset dir="${module.gameengine.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.gameengine.tests" depends="register.custom.compilers,compile.module.gameengine.production" description="compile module GameEngine; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.gameengine" description="cleanup module">
+    <delete dir="${gameengine.output.dir}"/>
+    <delete dir="${gameengine.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.gameengine" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.gameengine" description="build all modules"/>
+  
+  <target name="all" depends="build.modules" description="build all"/>
+</project>
